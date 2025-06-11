@@ -4,6 +4,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.CircularProgressIndicator
@@ -33,7 +34,7 @@ fun DealsListScreen(modifier: Modifier = Modifier, dealsListState: DealsListStat
             items(dealsListState.dealUiItems) {
                 DealItemComposable(dealItem = it)
                 Divider(
-                    modifier = Modifier.fillMaxWidth(),
+                    modifier = Modifier.fillMaxWidth().padding(start = 16.dp),
                     thickness = 1.dp,
                 )
             }
