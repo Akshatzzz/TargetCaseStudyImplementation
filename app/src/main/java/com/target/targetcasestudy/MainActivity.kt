@@ -4,6 +4,7 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.Canvas
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
@@ -20,9 +21,11 @@ import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.WindowInsetsControllerCompat
 import com.target.targetcasestudy.domain.prevDealItem
 import com.target.targetcasestudy.presentation.deallist.DealsListScreen
+import com.target.targetcasestudy.presentation.deallist.components.HeaderComposable
 import com.target.targetcasestudy.presentation.uimodels.DealsListState
 import com.target.targetcasestudy.presentation.uimodels.toDealItemUI
 import com.target.targetcasestudy.theme.CaseStudyTheme
+import com.target.targetcasestudy.theme.primaryRed
 
 class MainActivity : ComponentActivity() {
 
@@ -35,13 +38,15 @@ class MainActivity : ComponentActivity() {
                 Scaffold(
                     contentWindowInsets = WindowInsets.safeDrawing,
                 ) { innerPadding ->
-                    DealsListScreen(
-                        modifier = Modifier
-                            .padding(innerPadding),
-                        dealsListState = DealsListState(dealUiItems = List(100) {
-                            prevDealItem.toDealItemUI()
-                        })
-                    )
+                    Column(modifier = Modifier.padding(innerPadding)) {
+                        HeaderComposable()
+
+                        DealsListScreen(
+                            dealsListState = DealsListState(dealUiItems = List(100) {
+                                prevDealItem.toDealItemUI()
+                            })
+                        )
+                    }
 
                     StatusBarProtection()
                 }
@@ -59,7 +64,7 @@ class MainActivity : ComponentActivity() {
 
 @Composable
 private fun StatusBarProtection(
-    color: Color = Color.Red,
+    color: Color = primaryRed,
     heightProvider: () -> Float = calculateGradientHeight(),
 ) {
 
