@@ -19,11 +19,11 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalDensity
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.WindowInsetsControllerCompat
-import com.target.targetcasestudy.domain.prevDealItem
-import com.target.targetcasestudy.presentation.deallist.DealsListScreen
-import com.target.targetcasestudy.presentation.deallist.components.HeaderComposable
-import com.target.targetcasestudy.presentation.uimodels.DealsListState
-import com.target.targetcasestudy.presentation.uimodels.toDealItemUI
+import com.target.targetcasestudy.deals.domain.prevDealItem
+import com.target.targetcasestudy.deals.presentation.deallist.DealsListScreen
+import com.target.targetcasestudy.deals.presentation.deallist.components.HeaderComposable
+import com.target.targetcasestudy.deals.presentation.uimodels.DealsListState
+import com.target.targetcasestudy.deals.presentation.uimodels.toDealItemUI
 import com.target.targetcasestudy.theme.CaseStudyTheme
 import com.target.targetcasestudy.theme.primaryRed
 

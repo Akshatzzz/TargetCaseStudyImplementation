@@ -1,24 +1,32 @@
-package com.target.targetcasestudy.domain
+package com.target.targetcasestudy.deals.domain
 
+import com.squareup.moshi.JsonClass
+
+import com.squareup.moshi.Json
+
+@JsonClass(generateAdapter = true)
+data class Deals(
+  val products: List<DealItem>
+)
+
+@JsonClass(generateAdapter = true)
 data class DealItem(
   val id: Int,
   val title: String,
   val aisle: String,
   val description: String,
-  val imageUrl: String,
-  val regularPrice: Price,
+  @Json(name = "image_url") val imageUrl: String,
+  @Json(name = "regular_price") val regularPrice: Price,
   val fulfillment: String,
   val availability: String
 )
 
+@JsonClass(generateAdapter = true)
 data class Price(
-  val amountInCents: Int,
-  val currencySymbol: String,
-  val displayString: String
+  @Json(name = "amount_in_cents") val amountInCents: Int,
+  @Json(name = "currency_symbol") val currencySymbol: String,
+  @Json(name = "display_string") val displayString: String
 )
-
-
-
 
 internal val prevDealItem = DealItem(
   id = 0,

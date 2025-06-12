@@ -1,7 +1,7 @@
-package com.target.targetcasestudy.data
+package com.target.targetcasestudy.deals.data
 
-import com.target.targetcasestudy.domain.DealItem
-import com.target.targetcasestudy.domain.Price
+import com.target.targetcasestudy.deals.domain.DealItem
+import com.target.targetcasestudy.deals.domain.Price
 
 object StaticData {
   val deals: List<DealItem> = listOf(

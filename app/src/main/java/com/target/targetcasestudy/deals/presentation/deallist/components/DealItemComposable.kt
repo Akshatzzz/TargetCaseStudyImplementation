@@ -1,5 +1,6 @@
-package com.target.targetcasestudy.presentation.deallist.components
+package com.target.targetcasestudy.deals.presentation.deallist.components
 
+import android.content.res.Configuration
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -27,9 +28,9 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.skydoves.landscapist.ImageOptions
 import com.skydoves.landscapist.glide.GlideImage
-import com.target.targetcasestudy.domain.prevDealItem
-import com.target.targetcasestudy.presentation.uimodels.DealItemUI
-import com.target.targetcasestudy.presentation.uimodels.toDealItemUI
+import com.target.targetcasestudy.deals.domain.prevDealItem
+import com.target.targetcasestudy.deals.presentation.uimodels.DealItemUI
+import com.target.targetcasestudy.deals.presentation.uimodels.toDealItemUI
 import com.target.targetcasestudy.theme.black
 import com.target.targetcasestudy.theme.darkGreyText
 import com.target.targetcasestudy.theme.inStockGreenText
@@ -122,7 +123,7 @@ fun DealItemComposable(modifier: Modifier = Modifier, dealItem: DealItemUI) {
 
 @Preview(widthDp = 360, heightDp = 120)
 @Preview(widthDp = 600, heightDp = 120)
-@Preview(widthDp = 360, heightDp = 120, uiMode = android.content.res.Configuration.UI_MODE_NIGHT_YES)
+@Preview(widthDp = 360, heightDp = 120, uiMode = Configuration.UI_MODE_NIGHT_YES)
 @PreviewLightDark
 @Composable
 private fun DetailItemComposable() {

@@ -1,4 +1,4 @@
-package com.target.targetcasestudy.presentation.uimodels
+package com.target.targetcasestudy.deals.presentation.uimodels
 
 import androidx.compose.runtime.Immutable
 

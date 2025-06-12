@@ -1,4 +1,4 @@
-package com.target.targetcasestudy.presentation.deallist
+package com.target.targetcasestudy.deals.presentation.deallist
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -14,10 +14,10 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.target.targetcasestudy.domain.prevDealItem
-import com.target.targetcasestudy.presentation.deallist.components.DealItemComposable
-import com.target.targetcasestudy.presentation.uimodels.DealsListState
-import com.target.targetcasestudy.presentation.uimodels.toDealItemUI
+import com.target.targetcasestudy.deals.domain.prevDealItem
+import com.target.targetcasestudy.deals.presentation.deallist.components.DealItemComposable
+import com.target.targetcasestudy.deals.presentation.uimodels.DealsListState
+import com.target.targetcasestudy.deals.presentation.uimodels.toDealItemUI
 
 @Composable
 fun DealsListScreen(modifier: Modifier = Modifier, dealsListState: DealsListState) {

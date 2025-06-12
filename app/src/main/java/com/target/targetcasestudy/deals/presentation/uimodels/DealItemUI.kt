@@ -1,6 +1,6 @@
-package com.target.targetcasestudy.presentation.uimodels
+package com.target.targetcasestudy.deals.presentation.uimodels
 
-import com.target.targetcasestudy.domain.DealItem
+import com.target.targetcasestudy.deals.domain.DealItem
 
 data class DealItemUI(
     val id: Int,
