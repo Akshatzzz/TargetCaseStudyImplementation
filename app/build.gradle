@@ -78,6 +78,13 @@ dependencies {
   implementation libs.glide
   implementation(libs.landscapist.glide)
 
+  // DI
+  implementation(libs.koin.androidx.compose)
+  implementation(libs.koin.android)
+
+  // navigation
+  implementation(libs.navigation.compose)
+
   implementation libs.hiltAndroid
   ksp libs.hiltCompiler
 

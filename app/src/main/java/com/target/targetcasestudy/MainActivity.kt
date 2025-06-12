@@ -4,6 +4,8 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.Canvas
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
@@ -12,6 +14,7 @@ import androidx.compose.foundation.layout.safeDrawing
 import androidx.compose.foundation.layout.statusBars
 import androidx.compose.material.Scaffold
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Brush
@@ -19,13 +22,17 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalDensity
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.WindowInsetsControllerCompat
-import com.target.targetcasestudy.deals.domain.prevDealItem
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.rememberNavController
+import com.target.targetcasestudy.core.navigation.Screen
 import com.target.targetcasestudy.deals.presentation.deallist.DealsListScreen
+import com.target.targetcasestudy.deals.presentation.deallist.DealsListViewModel
 import com.target.targetcasestudy.deals.presentation.deallist.components.HeaderComposable
-import com.target.targetcasestudy.deals.presentation.uimodels.DealsListState
-import com.target.targetcasestudy.deals.presentation.uimodels.toDealItemUI
 import com.target.targetcasestudy.theme.CaseStudyTheme
 import com.target.targetcasestudy.theme.primaryRed
+import org.koin.androidx.compose.koinViewModel
 
 class MainActivity : ComponentActivity() {
 
@@ -33,19 +40,41 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
 
         hideSystemBars()
+
         setContent {
             CaseStudyTheme {
-                Scaffold(
-                    contentWindowInsets = WindowInsets.safeDrawing,
-                ) { innerPadding ->
-                    Column(modifier = Modifier.padding(innerPadding)) {
-                        HeaderComposable()
+                val navController = rememberNavController()
+                val viewModel: DealsListViewModel = koinViewModel()
+                val state = viewModel.dealsListState.collectAsStateWithLifecycle()
 
-                        DealsListScreen(
-                            dealsListState = DealsListState(dealUiItems = List(100) {
-                                prevDealItem.toDealItemUI()
-                            })
-                        )
+                LaunchedEffect(state.value.selectedDeal) {
+                    if (state.value.selectedDeal != null) {
+                        navController.navigate(Screen.DealDetails.route)
+                        viewModel.clearSelectedDeal()
+                    }
+                }
+
+                Scaffold(contentWindowInsets = WindowInsets.safeDrawing) { innerPadding ->
+
+                    NavHost(
+                        navController = navController,
+                        startDestination = Screen.DealsList.route,
+                        modifier = Modifier.padding(innerPadding)
+                    ) {
+                        composable(Screen.DealsList.route) {
+                            Column {
+                                HeaderComposable()
+                                DealsListScreen(
+                                    dealsListState = state.value,
+                                    events = viewModel.dealsListEvent,
+                                    dealsListAction = viewModel::onAction
+                                )
+                            }
+                        }
+
+                        composable(Screen.DealDetails.route) {
+                            RandomComposable()
+                        }
                     }
 
                     StatusBarProtection()
@@ -53,6 +82,7 @@ class MainActivity : ComponentActivity() {
             }
         }
     }
+
 
     private fun hideSystemBars() {
         val windowInsetsController = WindowInsetsControllerCompat(window, window.decorView)
@@ -91,4 +121,13 @@ fun calculateGradientHeight(): () -> Float {
     val statusBars = WindowInsets.statusBars
     val density = LocalDensity.current
     return { statusBars.getTop(density).times(1f) }
+}
+
+@Composable
+fun RandomComposable(modifier: Modifier = Modifier) {
+    Box(
+        modifier = Modifier.fillMaxSize().background(Color.Red)
+    ) {
+
+    }
 }

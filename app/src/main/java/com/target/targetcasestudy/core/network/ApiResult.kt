@@ -1,5 +1,6 @@
 package com.target.targetcasestudy.core.network
 
+import com.target.targetcasestudy.core.utils.TargetCaseStudyException
 import retrofit2.HttpException
 import retrofit2.Response
 
@@ -36,18 +37,18 @@ suspend fun <T : Any> ApiResult<T>.onSuccess(
     }
 }
 
-suspend fun <T : Any> ApiResult<T>.onError(
-    executable: suspend (code: Int, message: String?) -> Unit
-): ApiResult<T> = apply {
-    if (this is ApiResult.Error<T>) {
-        executable(code, message)
-    }
-}
-
-suspend fun <T : Any> ApiResult<T>.onException(
+suspend fun <T : Any> ApiResult<T>.onFailure(
     executable: suspend (e: Throwable) -> Unit
 ): ApiResult<T> = apply {
     if (this is ApiResult.Exception<T>) {
         executable(e)
+    }
+    if (this is ApiResult.Error<T>) {
+        executable(
+            TargetCaseStudyException(
+                message = message,
+                errorCode = code,
+            )
+        )
     }
 }
