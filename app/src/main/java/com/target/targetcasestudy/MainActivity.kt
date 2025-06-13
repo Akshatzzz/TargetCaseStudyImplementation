@@ -26,10 +26,12 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.target.targetcasestudy.core.components.HeaderComposable
+import com.target.targetcasestudy.core.components.HeaderComposablePayload
 import com.target.targetcasestudy.core.navigation.Screen
 import com.target.targetcasestudy.deals.presentation.deallist.DealsListScreen
 import com.target.targetcasestudy.deals.presentation.deallist.DealsListViewModel
-import com.target.targetcasestudy.deals.presentation.deallist.components.HeaderComposable
+import com.target.targetcasestudy.deals.presentation.detailscreen.DealDetailScreen
 import com.target.targetcasestudy.theme.CaseStudyTheme
 import com.target.targetcasestudy.theme.primaryRed
 import org.koin.androidx.compose.koinViewModel
@@ -50,7 +52,7 @@ class MainActivity : ComponentActivity() {
                 LaunchedEffect(state.value.selectedDeal) {
                     if (state.value.selectedDeal != null) {
                         navController.navigate(Screen.DealDetails.route)
-                        viewModel.clearSelectedDeal()
+//                        viewModel.clearSelectedDeal()
                     }
                 }
 
@@ -63,7 +65,11 @@ class MainActivity : ComponentActivity() {
                     ) {
                         composable(Screen.DealsList.route) {
                             Column {
-                                HeaderComposable()
+                                HeaderComposable(
+                                    headerComposablePayload = HeaderComposablePayload(
+                                        "List", false
+                                    )
+                                )
                                 DealsListScreen(
                                     dealsListState = state.value,
                                     events = viewModel.dealsListEvent,
@@ -73,7 +79,7 @@ class MainActivity : ComponentActivity() {
                         }
 
                         composable(Screen.DealDetails.route) {
-                            RandomComposable()
+                            state.value.selectedDeal?.let { modifier -> DealDetailScreen(dealItemUI = modifier) }
                         }
                     }
 
@@ -102,12 +108,8 @@ private fun StatusBarProtection(
         val calculatedHeight = heightProvider()
         val gradient = Brush.verticalGradient(
             colors = listOf(
-                color.copy(alpha = 1f),
-                color.copy(alpha = 1f),
-                color
-            ),
-            startY = 0f,
-            endY = calculatedHeight
+                color.copy(alpha = 1f), color.copy(alpha = 1f), color
+            ), startY = 0f, endY = calculatedHeight
         )
         drawRect(
             brush = gradient,
@@ -126,7 +128,9 @@ fun calculateGradientHeight(): () -> Float {
 @Composable
 fun RandomComposable(modifier: Modifier = Modifier) {
     Box(
-        modifier = Modifier.fillMaxSize().background(Color.Red)
+        modifier = Modifier
+            .fillMaxSize()
+            .background(Color.Red)
     ) {
 
     }

@@ -5,7 +5,7 @@ import com.target.targetcasestudy.deals.domain.DealItem
 data class DealItemUI(
     val id: Int,
     val title: String,
-    val description: String,
+    val description: String?,
     val imageUrl: String,
     val fulfillment: String,
     val availability: String,

@@ -14,7 +14,7 @@ data class DealItem(
   val id: Int,
   val title: String,
   val aisle: String,
-  val description: String,
+  val description: String? = null,
   @Json(name = "image_url") val imageUrl: String,
   @Json(name = "regular_price") val regularPrice: Price,
   val fulfillment: String,
