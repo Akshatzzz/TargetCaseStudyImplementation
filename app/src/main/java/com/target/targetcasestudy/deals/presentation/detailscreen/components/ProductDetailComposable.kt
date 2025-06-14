@@ -1,8 +1,8 @@
 package com.target.targetcasestudy.deals.presentation.detailscreen.components
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -11,19 +11,22 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.skydoves.landscapist.ImageOptions
 import com.skydoves.landscapist.glide.GlideImage
+import com.target.targetcasestudy.core.components.PriceTextComposable
+import com.target.targetcasestudy.deals.domain.prevDealItem
 import com.target.targetcasestudy.deals.presentation.uimodels.DealItemUI
+import com.target.targetcasestudy.deals.presentation.uimodels.toDealItemUI
 import com.target.targetcasestudy.theme.black
-import com.target.targetcasestudy.theme.darkGreyText
 import com.target.targetcasestudy.theme.greyMediumText
 import com.target.targetcasestudy.theme.lightGreyText
-import com.target.targetcasestudy.theme.priceTextRed
 
 @Composable
 fun ProductDetailComposable(
@@ -31,8 +34,8 @@ fun ProductDetailComposable(
     dealItemUI: DealItemUI
 ) {
     Column(
-        modifier = Modifier.padding(16.dp),
-        verticalArrangement = Arrangement.spacedBy(16.dp),
+        modifier = modifier.padding(16.dp),
+        verticalArrangement = Arrangement.SpaceEvenly,
         horizontalAlignment = Alignment.Start
     ) {
         GlideImage(
@@ -54,48 +57,34 @@ fun ProductDetailComposable(
             maxLines = 2,
             overflow = TextOverflow.Ellipsis,
             lineHeight = 20.sp,
-            modifier = Modifier.padding(vertical = 2.dp)
+            modifier = Modifier.padding(vertical = 16.dp)
         )
 
-        Row(
-            verticalAlignment = Alignment.Bottom,
-            horizontalArrangement = Arrangement.spacedBy(6.dp)
-        ) {
-            Text(
-                text = dealItemUI.displayAmount,
-                fontWeight = FontWeight.Bold,
-                fontSize = 18.sp,
-                color = priceTextRed,
-            )
-
-            Text(
-                text = dealItemUI.actualPriceString,
-                fontWeight = FontWeight.Normal,
-                fontSize = 12.sp,
-                color = darkGreyText,
-            )
-        }
+        PriceTextComposable(dealItemUI.displayAmount, dealItemUI.actualPriceString)
 
         Text(
             text = dealItemUI.fulfillment,
             fontWeight = FontWeight.Normal,
-            fontSize = 10.sp,
+            fontSize = 14.sp,
+            lineHeight = 14.sp,
             color = lightGreyText,
             maxLines = 1,
-            overflow = TextOverflow.Ellipsis
+            overflow = TextOverflow.Ellipsis,
+            modifier = Modifier.padding(vertical = 2.dp)
         )
 
         Text(
             text = "Product details",
             fontWeight = FontWeight.Bold,
-            fontSize = 15.sp,
+            fontSize = 18.sp,
             lineHeight = 18.sp,
             color = black,
             maxLines = 1,
-            overflow = TextOverflow.Ellipsis
+            overflow = TextOverflow.Ellipsis,
+            modifier = Modifier.padding(vertical = 16.dp)
         )
 
-        if(!dealItemUI.description.isNullOrBlank()){
+        if (!dealItemUI.description.isNullOrBlank()) {
             Text(
                 text = dealItemUI.description,
                 fontWeight = FontWeight.Normal,
@@ -105,4 +94,14 @@ fun ProductDetailComposable(
             )
         }
     }
+}
+
+@Preview
+@Composable
+private fun DetailComposable() {
+    ProductDetailComposable(
+        dealItemUI = prevDealItem.toDealItemUI(), modifier = Modifier.background(
+            Color.White
+        )
+    )
 }

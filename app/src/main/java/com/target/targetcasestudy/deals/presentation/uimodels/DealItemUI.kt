@@ -14,7 +14,7 @@ data class DealItemUI(
     val aisleString: String
 )
 
-fun DealItem.toDealItemUI() : DealItemUI {
+fun DealItem.toDealItemUI(): DealItemUI {
     return DealItemUI(
         id = id,
         title = title,
@@ -23,7 +23,16 @@ fun DealItem.toDealItemUI() : DealItemUI {
         fulfillment = fulfillment,
         availability = availability,
         displayAmount = regularPrice.displayString,
-        actualPriceString = "reg. ${regularPrice.displayString}",
+        actualPriceString = "reg. ${
+            formatCentsWithSymbol(
+                regularPrice.amountInCents, regularPrice.currencySymbol
+            )
+        }",
         aisleString = "in aisle $aisle",
     )
+}
+
+fun formatCentsWithSymbol(cents: Int, symbol: String): String {
+    val amount = cents / 100.0
+    return "$symbol%.2f".format(amount)
 }

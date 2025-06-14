@@ -29,14 +29,13 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.skydoves.landscapist.ImageOptions
 import com.skydoves.landscapist.glide.GlideImage
+import com.target.targetcasestudy.core.components.PriceTextComposable
 import com.target.targetcasestudy.deals.domain.prevDealItem
 import com.target.targetcasestudy.deals.presentation.uimodels.DealItemUI
 import com.target.targetcasestudy.deals.presentation.uimodels.toDealItemUI
 import com.target.targetcasestudy.theme.black
-import com.target.targetcasestudy.theme.darkGreyText
 import com.target.targetcasestudy.theme.inStockGreenText
 import com.target.targetcasestudy.theme.lightGreyText
-import com.target.targetcasestudy.theme.priceTextRed
 import com.target.targetcasestudy.theme.white
 
 @Composable
@@ -70,32 +69,16 @@ fun DealItemComposable(
             modifier = Modifier
                 .weight(1f)
                 .fillMaxWidth(),
-            verticalArrangement = Arrangement.spacedBy(4.dp),
+            verticalArrangement = Arrangement.SpaceEvenly,
             horizontalAlignment = Alignment.Start
         ) {
-            Row(
-                verticalAlignment = Alignment.Bottom,
-                horizontalArrangement = Arrangement.spacedBy(6.dp)
-            ) {
-                Text(
-                    text = dealItem.displayAmount,
-                    fontWeight = FontWeight.Bold,
-                    fontSize = 18.sp,
-                    color = priceTextRed,
-                )
+            PriceTextComposable(dealItem.displayAmount, dealItem.actualPriceString)
 
-                Text(
-                    text = dealItem.actualPriceString,
-                    fontWeight = FontWeight.Normal,
-                    fontSize = 12.sp,
-                    color = darkGreyText,
-                )
-            }
-            
             Text(
                 text = dealItem.fulfillment,
                 fontWeight = FontWeight.Normal,
                 fontSize = 10.sp,
+                lineHeight = 10.sp,
                 color = lightGreyText,
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis
@@ -109,7 +92,7 @@ fun DealItemComposable(
                 maxLines = 3,
                 overflow = TextOverflow.Ellipsis,
                 lineHeight = 18.sp,
-                modifier = Modifier.padding(vertical = 2.dp)
+                modifier = Modifier.padding(vertical = 8.dp)
             )
 
             Text(
@@ -123,6 +106,7 @@ fun DealItemComposable(
                 },
                 fontSize = 11.sp,
                 maxLines = 1,
+                lineHeight = 11.sp,
                 overflow = TextOverflow.Ellipsis
             )
         }
