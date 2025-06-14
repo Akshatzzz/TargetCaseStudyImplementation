@@ -7,6 +7,7 @@ import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
@@ -14,7 +15,7 @@ import androidx.compose.foundation.layout.safeDrawing
 import androidx.compose.foundation.layout.statusBars
 import androidx.compose.material.Scaffold
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.State
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Brush
@@ -23,17 +24,22 @@ import androidx.compose.ui.platform.LocalDensity
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.WindowInsetsControllerCompat
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.target.targetcasestudy.core.components.HeaderComposable
 import com.target.targetcasestudy.core.components.HeaderComposablePayload
 import com.target.targetcasestudy.core.navigation.Screen
+import com.target.targetcasestudy.deals.presentation.deallist.DealsListEvent
 import com.target.targetcasestudy.deals.presentation.deallist.DealsListScreen
 import com.target.targetcasestudy.deals.presentation.deallist.DealsListViewModel
 import com.target.targetcasestudy.deals.presentation.detailscreen.DealDetailScreen
+import com.target.targetcasestudy.deals.presentation.uimodels.DealDetailState
+import com.target.targetcasestudy.deals.presentation.uimodels.DealsListState
 import com.target.targetcasestudy.theme.CaseStudyTheme
 import com.target.targetcasestudy.theme.primaryRed
+import kotlinx.coroutines.flow.SharedFlow
 import org.koin.androidx.compose.koinViewModel
 
 class MainActivity : ComponentActivity() {
@@ -45,45 +51,53 @@ class MainActivity : ComponentActivity() {
 
         setContent {
             CaseStudyTheme {
-                val navController = rememberNavController()
-                val viewModel: DealsListViewModel = koinViewModel()
-                val state = viewModel.dealsListState.collectAsStateWithLifecycle()
+                Scaffold(contentWindowInsets = WindowInsets.safeDrawing) { innerPadding ->
+                    val viewModel: DealsListViewModel = koinViewModel()
+                    val navController = rememberNavController()
+                    val state = viewModel.dealsListState.collectAsStateWithLifecycle()
+                    val detailState = viewModel.dealDetailState.collectAsStateWithLifecycle()
+                    App(innerPadding, viewModel,navController,state,detailState,viewModel.dealsListEvent)
+                    StatusBarProtection()
+                }
+            }
+        }
+    }
 
-                LaunchedEffect(state.value.selectedDeal) {
-                    if (state.value.selectedDeal != null) {
+    @Composable
+    private fun App(
+        innerPadding: PaddingValues,
+        viewModel: DealsListViewModel,
+        navController: NavHostController,
+        state: State<DealsListState>,
+        detailState: State<DealDetailState>,
+        dealsListEvent: SharedFlow<DealsListEvent>,
+    ) {
+        NavHost(
+            navController = navController,
+            startDestination = Screen.DealsList.route,
+            modifier = Modifier.padding(innerPadding)
+        ) {
+            composable(route = Screen.DealsList.route) {
+                Column {
+                    HeaderComposable(
+                        headerComposablePayload = HeaderComposablePayload(
+                            "List", false
+                        )
+                    )
+                    DealsListScreen(
+                        dealsListState = state.value, events = dealsListEvent
+                    ) { action ->
+                        viewModel.onAction(action)
                         navController.navigate(Screen.DealDetails.route)
-//                        viewModel.clearSelectedDeal()
                     }
                 }
+            }
 
-                Scaffold(contentWindowInsets = WindowInsets.safeDrawing) { innerPadding ->
-
-                    NavHost(
-                        navController = navController,
-                        startDestination = Screen.DealsList.route,
-                        modifier = Modifier.padding(innerPadding)
-                    ) {
-                        composable(Screen.DealsList.route) {
-                            Column {
-                                HeaderComposable(
-                                    headerComposablePayload = HeaderComposablePayload(
-                                        "List", false
-                                    )
-                                )
-                                DealsListScreen(
-                                    dealsListState = state.value,
-                                    events = viewModel.dealsListEvent,
-                                    dealsListAction = viewModel::onAction
-                                )
-                            }
-                        }
-
-                        composable(Screen.DealDetails.route) {
-                            state.value.selectedDeal?.let { modifier -> DealDetailScreen(dealItemUI = modifier) }
-                        }
-                    }
-
-                    StatusBarProtection()
+            composable(route = Screen.DealDetails.route) {
+                DealDetailScreen(
+                    dealDetailState = detailState.value
+                ) {
+                    navController.popBackStack()
                 }
             }
         }
@@ -123,15 +137,4 @@ fun calculateGradientHeight(): () -> Float {
     val statusBars = WindowInsets.statusBars
     val density = LocalDensity.current
     return { statusBars.getTop(density).times(1f) }
-}
-
-@Composable
-fun RandomComposable(modifier: Modifier = Modifier) {
-    Box(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(Color.Red)
-    ) {
-
-    }
 }

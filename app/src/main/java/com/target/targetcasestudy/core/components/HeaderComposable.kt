@@ -1,6 +1,7 @@
 package com.target.targetcasestudy.core.components
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -25,7 +26,9 @@ import com.target.targetcasestudy.theme.primaryRed
 
 @Composable
 fun HeaderComposable(
-    modifier: Modifier = Modifier, headerComposablePayload: HeaderComposablePayload
+    modifier: Modifier = Modifier,
+    headerComposablePayload: HeaderComposablePayload,
+    onBackClick: (() -> Unit)? = null
 ) {
     Row(
         modifier = modifier
@@ -38,7 +41,9 @@ fun HeaderComposable(
     ) {
         if (headerComposablePayload.showArrow) {
             Icon(
-                modifier = Modifier.padding(start = 4.dp),
+                modifier = Modifier.padding(start = 4.dp).clickable {
+                    onBackClick?.invoke()
+                },
                 painter = painterResource(R.drawable.icon_left),
                 contentDescription = null,
                 tint = primaryRed

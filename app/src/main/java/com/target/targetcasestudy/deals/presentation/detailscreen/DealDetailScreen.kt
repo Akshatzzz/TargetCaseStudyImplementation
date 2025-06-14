@@ -1,28 +1,53 @@
 package com.target.targetcasestudy.deals.presentation.detailscreen
 
+import androidx.compose.foundation.ScrollState
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import com.target.targetcasestudy.core.components.HeaderComposable
 import com.target.targetcasestudy.core.components.HeaderComposablePayload
 import com.target.targetcasestudy.deals.presentation.detailscreen.components.AddToCardButtonComposable
 import com.target.targetcasestudy.deals.presentation.detailscreen.components.ProductDetailComposable
-import com.target.targetcasestudy.deals.presentation.uimodels.DealItemUI
+import com.target.targetcasestudy.deals.presentation.uimodels.DealDetailState
 
 @Composable
-fun DealDetailScreen(modifier: Modifier = Modifier,dealItemUI: DealItemUI) {
-    Column(
-        modifier = Modifier.fillMaxSize()
-    ) {
-        HeaderComposable(headerComposablePayload = HeaderComposablePayload("Details",true))
+fun DealDetailScreen(
+    modifier: Modifier = Modifier, dealDetailState: DealDetailState, onBackClick: () -> Unit
+) {
+    if (dealDetailState.isLoading) {
+        Box(
+            modifier = modifier.fillMaxSize(), contentAlignment = Alignment.Center
+        ) {
+            CircularProgressIndicator()
+        }
+    } else if (dealDetailState.dealDetailElement != null) {
+        Column(
+            modifier = modifier.fillMaxSize()
+        ) {
+            HeaderComposable(
+                headerComposablePayload = HeaderComposablePayload("Details", true)
+            ) {
+                onBackClick()
+            }
 
-        ProductDetailComposable(modifier = Modifier.weight(1f),dealItemUI = dealItemUI)
+            Box(
+                modifier = Modifier
+                    .weight(1f)
+                    .verticalScroll(ScrollState(0))
+            ) {
+                ProductDetailComposable(
+                    dealItemUI = dealDetailState.dealDetailElement
+                )
+            }
 
-        Spacer(modifier = Modifier.weight(1f))
-        AddToCardButtonComposable() {
-            TODO()
+            AddToCardButtonComposable {
+                TODO()
+            }
         }
     }
 }
