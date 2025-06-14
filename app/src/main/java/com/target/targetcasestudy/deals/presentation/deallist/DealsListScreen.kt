@@ -36,22 +36,8 @@ import kotlinx.coroutines.flow.shareIn
 fun DealsListScreen(
     modifier: Modifier = Modifier,
     dealsListState: DealsListState,
-    events: SharedFlow<DealsListEvent>,
     dealsListAction: (DealsListAction) -> Unit
 ) {
-    val context = LocalContext.current
-    val lifecycleOwner = LocalLifecycleOwner.current
-    LaunchedEffect(lifecycleOwner.lifecycle) {
-        lifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
-            events.collect { event ->
-                when (event) {
-                    is DealsListEvent.Error -> {
-                        Toast.makeText(context, event.errorString, Toast.LENGTH_SHORT).show()
-                    }
-                }
-            }
-        }
-    }
     if (dealsListState.isLoading) {
         Box(
             modifier = modifier.fillMaxSize(), contentAlignment = Alignment.Center
@@ -63,7 +49,7 @@ fun DealsListScreen(
             modifier = modifier.fillMaxSize(), verticalArrangement = Arrangement.spacedBy(8.dp)
         ) {
             items(dealsListState.dealUiItems) {
-                DealItemComposable(dealItem = it) { dealUi->
+                DealItemComposable(dealItem = it) { dealUi ->
                     dealsListAction(DealsListAction.OnDealClick(dealUi))
                 }
                 Divider(
@@ -84,5 +70,5 @@ fun DealsListScreen(
 private fun DealsListPreview() {
     DealsListScreen(dealsListState = DealsListState(dealUiItems = List(100) {
         prevDealItem.toDealItemUI()
-    }), events = emptyFlow<DealsListEvent>().shareIn(GlobalScope, SharingStarted.Lazily)) {}
+    })) {}
 }

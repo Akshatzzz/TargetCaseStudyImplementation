@@ -56,7 +56,7 @@ class MainActivity : ComponentActivity() {
                     val navController = rememberNavController()
                     val state = viewModel.dealsListState.collectAsStateWithLifecycle()
                     val detailState = viewModel.dealDetailState.collectAsStateWithLifecycle()
-                    App(innerPadding, viewModel,navController,state,detailState,viewModel.dealsListEvent)
+                    App(innerPadding, viewModel,navController,state,detailState)
                     StatusBarProtection()
                 }
             }
@@ -69,8 +69,7 @@ class MainActivity : ComponentActivity() {
         viewModel: DealsListViewModel,
         navController: NavHostController,
         state: State<DealsListState>,
-        detailState: State<DealDetailState>,
-        dealsListEvent: SharedFlow<DealsListEvent>,
+        detailState: State<DealDetailState>
     ) {
         NavHost(
             navController = navController,
@@ -85,7 +84,7 @@ class MainActivity : ComponentActivity() {
                         )
                     )
                     DealsListScreen(
-                        dealsListState = state.value, events = dealsListEvent
+                        dealsListState = state.value
                     ) { action ->
                         viewModel.onAction(action)
                         navController.navigate(Screen.DealDetails.route)
