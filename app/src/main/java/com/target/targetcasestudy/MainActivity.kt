@@ -5,8 +5,6 @@ import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.Canvas
-import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.WindowInsets
@@ -35,7 +33,6 @@ import com.target.targetcasestudy.core.components.HeaderComposable
 import com.target.targetcasestudy.core.components.HeaderComposablePayload
 import com.target.targetcasestudy.core.navigation.Screen
 import com.target.targetcasestudy.deals.presentation.deallist.DealsListAction
-import com.target.targetcasestudy.deals.presentation.deallist.DealsListEvent
 import com.target.targetcasestudy.deals.presentation.deallist.DealsListScreen
 import com.target.targetcasestudy.deals.presentation.deallist.DealsListViewModel
 import com.target.targetcasestudy.deals.presentation.detailscreen.DealDetailScreen
