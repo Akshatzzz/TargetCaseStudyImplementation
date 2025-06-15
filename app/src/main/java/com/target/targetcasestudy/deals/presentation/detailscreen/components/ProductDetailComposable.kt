@@ -42,7 +42,6 @@ fun ProductDetailComposable(
             modifier = modifier.padding(16.dp),
             verticalArrangement = Arrangement.SpaceEvenly,
         ) {
-            // Wrap the image in a Box to center it horizontally
             Box(
                 modifier = Modifier.fillMaxWidth(), contentAlignment = Alignment.Center
             ) {
