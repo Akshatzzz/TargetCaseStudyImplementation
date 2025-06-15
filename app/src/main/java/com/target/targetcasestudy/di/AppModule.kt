@@ -20,11 +20,7 @@ import java.io.File
 
 val appModule = module {
     single {
-        val cacheSize = (5 * 1024 * 1024).toLong() // 5 MB
-        val cache = Cache(File(TargetCaseStudyApplication.getApplicationContext().cacheDir, "http_cache"), cacheSize)
-        OkHttpClient.Builder()
-            .cache(cache)
-            .build()
+        OkHttpClient()
     }
     single {
         Retrofit.Builder().baseUrl(BuildConfig.BASE_URL).client(get())
