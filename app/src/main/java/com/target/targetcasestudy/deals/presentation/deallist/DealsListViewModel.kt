@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.target.targetcasestudy.core.network.onFailure
 import com.target.targetcasestudy.core.network.onSuccess
+import com.target.targetcasestudy.core.utils.ADD_TO_CART_CLICKED
 import com.target.targetcasestudy.core.utils.SOMETHING_WENT_WRONG
 import com.target.targetcasestudy.deals.domain.DealsDataSource
 import com.target.targetcasestudy.deals.presentation.uimodels.DealDetailState
@@ -33,8 +34,8 @@ class DealsListViewModel(
     private val _dealDetailState = MutableStateFlow<DealDetailState>(DealDetailState())
     val dealDetailState = _dealDetailState.asStateFlow()
 
-    private val _dealsListEvents = MutableSharedFlow<DealsListEvent>()
-    val dealsListEvent = _dealsListEvents.asSharedFlow()
+    private val _toastEvent = MutableSharedFlow<String>()
+    val toastEvent = _toastEvent.asSharedFlow()
 
     private fun loadDeals() {
         viewModelScope.launch {
@@ -52,7 +53,7 @@ class DealsListViewModel(
                     _dealsListState.update {
                         it.copy(isLoading = false, dealUiItems = emptyList())
                     }
-                    _dealsListEvents.emit(DealsListEvent.Error(SOMETHING_WENT_WRONG))
+                    _toastEvent.emit("$SOMETHING_WENT_WRONG ${it.message}")
                 }
             }
         }
@@ -62,6 +63,12 @@ class DealsListViewModel(
         when (action) {
             is DealsListAction.OnDealClick -> {
                 loadDealsForId(action.dealItemUI.id)
+            }
+
+            is DealsListAction.onAddToCartClicked -> {
+                viewModelScope.launch {
+                    _toastEvent.emit("$ADD_TO_CART_CLICKED ${action.itemId}")
+                }
             }
         }
     }
@@ -83,7 +90,7 @@ class DealsListViewModel(
                     _dealDetailState.update {
                         it.copy(isLoading = false, dealDetailElement = null)
                     }
-
+                    _toastEvent.emit("$SOMETHING_WENT_WRONG ${it.message}")
                 }
             }
         }

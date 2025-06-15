@@ -1,6 +1,7 @@
 package com.target.targetcasestudy
 
 import android.os.Bundle
+import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.Canvas
@@ -15,11 +16,13 @@ import androidx.compose.foundation.layout.safeDrawing
 import androidx.compose.foundation.layout.statusBars
 import androidx.compose.material.Scaffold
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.State
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.WindowInsetsControllerCompat
@@ -31,6 +34,7 @@ import androidx.navigation.compose.rememberNavController
 import com.target.targetcasestudy.core.components.HeaderComposable
 import com.target.targetcasestudy.core.components.HeaderComposablePayload
 import com.target.targetcasestudy.core.navigation.Screen
+import com.target.targetcasestudy.deals.presentation.deallist.DealsListAction
 import com.target.targetcasestudy.deals.presentation.deallist.DealsListEvent
 import com.target.targetcasestudy.deals.presentation.deallist.DealsListScreen
 import com.target.targetcasestudy.deals.presentation.deallist.DealsListViewModel
@@ -56,8 +60,10 @@ class MainActivity : ComponentActivity() {
                     val navController = rememberNavController()
                     val state = viewModel.dealsListState.collectAsStateWithLifecycle()
                     val detailState = viewModel.dealDetailState.collectAsStateWithLifecycle()
-                    App(innerPadding, viewModel,navController,state,detailState)
+                    App(innerPadding, viewModel, navController, state, detailState)
                     StatusBarProtection()
+
+                    ToastCollector(viewModel.toastEvent)
                 }
             }
         }
@@ -94,9 +100,10 @@ class MainActivity : ComponentActivity() {
 
             composable(route = Screen.DealDetails.route) {
                 DealDetailScreen(
-                    dealDetailState = detailState.value
+                    dealDetailState = detailState.value,
+                    onBackClick = { navController.popBackStack() }
                 ) {
-                    navController.popBackStack()
+                    viewModel.onAction(DealsListAction.onAddToCartClicked(it))
                 }
             }
         }
@@ -136,4 +143,15 @@ fun calculateGradientHeight(): () -> Float {
     val statusBars = WindowInsets.statusBars
     val density = LocalDensity.current
     return { statusBars.getTop(density).times(1f) }
+}
+
+@Composable
+fun ToastCollector(toastFlow: SharedFlow<String>) {
+    val context = LocalContext.current
+
+    LaunchedEffect(key1 = toastFlow) {
+        toastFlow.collect { message ->
+            Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
+        }
+    }
 }

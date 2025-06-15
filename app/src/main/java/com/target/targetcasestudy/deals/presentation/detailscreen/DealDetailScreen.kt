@@ -21,7 +21,7 @@ import com.target.targetcasestudy.deals.presentation.uimodels.DealDetailState
 
 @Composable
 fun DealDetailScreen(
-    modifier: Modifier = Modifier, dealDetailState: DealDetailState, onBackClick: () -> Unit
+    modifier: Modifier = Modifier, dealDetailState: DealDetailState, onBackClick: () -> Unit,onAddToCardClicked: (id: Int) -> Unit
 ) {
     if (dealDetailState.isLoading) {
         Box(
@@ -50,7 +50,7 @@ fun DealDetailScreen(
             }
             Divider(Modifier.fillMaxWidth().shadow(elevation = 2.dp))
             AddToCardButtonComposable {
-                TODO()
+                onAddToCardClicked.invoke(dealDetailState.dealDetailElement.id)
             }
         }
     }
