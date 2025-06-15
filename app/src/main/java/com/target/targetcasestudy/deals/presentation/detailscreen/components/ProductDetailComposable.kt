@@ -35,25 +35,25 @@ import com.target.targetcasestudy.theme.lightGreyText
 
 @Composable
 fun ProductDetailComposable(
-    modifier: Modifier = Modifier,
-    dealItemUI: DealItemUI
+    modifier: Modifier = Modifier, dealItemUI: DealItemUI
 ) {
     Column {
         Column(
             modifier = modifier.padding(16.dp),
             verticalArrangement = Arrangement.SpaceEvenly,
-            horizontalAlignment = Alignment.Start
         ) {
-            GlideImage(
-                imageModel = { dealItemUI.imageUrl },
-                imageOptions = ImageOptions(
-                    contentScale = ContentScale.FillBounds,
-                    alignment = Alignment.Center
-                ),
-                modifier = Modifier
-                    .size(328.dp)
-                    .clip(RoundedCornerShape(6.dp))
-            )
+            // Wrap the image in a Box to center it horizontally
+            Box(
+                modifier = Modifier.fillMaxWidth(), contentAlignment = Alignment.Center
+            ) {
+                GlideImage(
+                    imageModel = { dealItemUI.imageUrl }, imageOptions = ImageOptions(
+                        contentScale = ContentScale.FillBounds, alignment = Alignment.Center
+                    ), modifier = Modifier
+                        .size(328.dp)
+                        .clip(RoundedCornerShape(6.dp))
+                )
+            }
 
             Text(
                 text = dealItemUI.title,

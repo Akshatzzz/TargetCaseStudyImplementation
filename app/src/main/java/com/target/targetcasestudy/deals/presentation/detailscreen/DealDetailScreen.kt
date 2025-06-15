@@ -31,7 +31,8 @@ fun DealDetailScreen(
         }
     } else if (dealDetailState.dealDetailElement != null) {
         Column(
-            modifier = modifier.fillMaxSize()
+            modifier = modifier.fillMaxSize(),
+            horizontalAlignment = Alignment.CenterHorizontally
         ) {
             HeaderComposable(
                 headerComposablePayload = HeaderComposablePayload("Details", true)
